@@ -1,0 +1,78 @@
+name: Manual download and place file
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'File download URL'
+        required: true
+        default: 'https://civitai.com/api/download/models/789646'
+      filename:
+        description: 'Filename to save as'
+        required: true
+        default: 'realvisxlV50_v50Bakedvae.safetensors'
+      path:
+        description: 'Relative path inside repo where file should be placed (directory)'
+        required: true
+        default: 'models'
+      commit:
+        description: 'Commit & push downloaded file into repository? (true/false)'
+        required: true
+        default: 'false'
+
+jobs:
+  download-and-place:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo (needed if committing)
+        uses: actions/checkout@v4
+        with:
+          # persist credentials so git push can use GITHUB_TOKEN if we commit
+          persist-credentials: true
+
+      - name: Show inputs
+        run: |
+          echo "URL: ${{ github.event.inputs.url }}"
+          echo "Filename: ${{ github.event.inputs.filename }}"
+          echo "Path: ${{ github.event.inputs.path }}"
+          echo "Commit: ${{ github.event.inputs.commit }}"
+
+      - name: Create target directory
+        run: |
+          mkdir -p "${{ github.workspace }}/${{ github.event.inputs.path }}"
+
+      - name: Download file
+        run: |
+          set -euo pipefail
+          URL="${{ github.event.inputs.url }}"
+          FNAME="${{ github.event.inputs.filename }}"
+          TARGET_DIR="${{ github.workspace }}/${{ github.event.inputs.path }}"
+          TARGET_PATH="$TARGET_DIR/$FNAME"
+          echo "Downloading to: $TARGET_PATH"
+          # follow redirects
+          curl -L --fail --show-error "$URL" -o "$TARGET_PATH"
+          echo "Download finished. Saved to $TARGET_PATH"
+          ls -lh "$TARGET_PATH" || true
+
+      - name: Upload as artifact (safe — recommended for large files)
+        uses: actions/upload-artifact@v4
+        with:
+          name: downloaded-file
+          path: ${{ github.event.inputs.path }}/\${{ github.event.inputs.filename }}
+          # NOTE: the above interpolation ensures path points to file(s) inside repo workspace
+
+      - name: Commit & push into repo (optional)
+        if: ${{ github.event.inputs.commit == 'true' }}
+        env:
+          GIT_USER_NAME: "github-actions[bot]"
+          GIT_USER_EMAIL: "41898282+github-actions[bot]@users.noreply.github.com"
+        run: |
+          set -euo pipefail
+          TARGET_DIR="${{ github.event.inputs.path }}"
+          FNAME="${{ github.event.inputs.filename }}"
+          git config user.name "$GIT_USER_NAME"
+          git config user.email "$GIT_USER_EMAIL"
+          git add --force "$TARGET_DIR/$FNAME"
+          git commit -m "Add downloaded file: $FNAME (via workflow)"
+          # push with the token that actions/checkout persisted
+          git push
