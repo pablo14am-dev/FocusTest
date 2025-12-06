@@ -300,16 +300,6 @@
         "negative_prompt": "light-hearted, mundane, familiar, simplistic, realistic"
     },
     {
-        "name": "misc-macabre",
-        "prompt": "macabre style {prompt} . dark, gothic, grim, haunting, highly detailed",
-        "negative_prompt": "bright, cheerful, light-hearted, cartoonish, cute"
-    },
-    {
-        "name": "misc-manga",
-        "prompt": "manga style {prompt} . vibrant, high-energy, detailed, iconic, Japanese comic style",
-        "negative_prompt": "ugly, deformed, noisy, blurry, low contrast, realism, photorealistic, Western comic style"
-    },
-    {
         "name": "misc-metropolis",
         "prompt": "metropolis-themed {prompt} . urban, cityscape, skyscrapers, modern, futuristic, highly detailed",
         "negative_prompt": "rural, natural, rustic, historical, simple"
@@ -343,11 +333,6 @@
         "name": "misc-techwear fashion",
         "prompt": "techwear fashion {prompt} . futuristic, cyberpunk, urban, tactical, sleek, dark, highly detailed",
         "negative_prompt": "vintage, rural, colorful, low contrast, realism, sketch, watercolor"
-    },
-    {
-        "name": "misc-tribal",
-        "prompt": "tribal style {prompt} . indigenous, ethnic, traditional patterns, bold, natural colors, highly detailed",
-        "negative_prompt": "modern, futuristic, minimalist, pastel"
     },
     {
         "name": "misc-zentangle",
@@ -418,11 +403,6 @@
         "name": "photo-hdr",
         "prompt": "HDR photo of {prompt} . High dynamic range, vivid, rich details, clear shadows and highlights, realistic, intense, enhanced contrast, highly detailed",
         "negative_prompt": "flat, low contrast, oversaturated, underexposed, overexposed, blurred, noisy"
-    },
-    {
-        "name": "photo-iphone photographic",
-        "prompt": "iphone photo {prompt} . large depth of field, deep depth of field, highly detailed",
-        "negative_prompt": "drawing, painting, crayon, sketch, graphite, impressionist, noisy, blurry, soft, deformed, ugly, shallow depth of field, bokeh"
     },
     {
         "name": "photo-long exposure",
